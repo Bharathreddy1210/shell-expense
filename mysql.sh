@@ -39,6 +39,16 @@ VALIDATE $? "Enable mysql server"
 systemctl start mysqld &>>$LOGFILE
 VALIDATE $? "Starting mysql server"
 
-mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
-VALIDATE $? "Setting up root password"
+# mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
+# VALIDATE $? "Setting up root password"
+
+mysql -h db.bharathdevops.site -uroot -pExpenseApp@1 -e 'show databases;'
+if [ $? -ne 0 ]
+then
+    mysql_secure_installation --set-root-pass-ExpenseApp@1
+    VALIDATE $? "mysql root password setup"
+else
+    echo -e $G "password already setup" $N 
+
+
 
