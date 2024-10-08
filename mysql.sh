@@ -39,9 +39,6 @@ VALIDATE $? "Enable mysql server"
 systemctl start mysqld &>>$LOGFILE
 VALIDATE $? "Starting mysql server"
 
-systemctl start docker &>>$LOGFILE
-VALIDATE $? "Starting docker"
-
 mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
 VALIDATE $? "Setting up root password"
 
