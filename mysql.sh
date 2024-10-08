@@ -49,3 +49,4 @@ then
     VALIDATE $? "mysql root password setup"
 else
     echo -e $G "password already setup" $N 
+
