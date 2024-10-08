@@ -10,7 +10,7 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 echo "please enter the DB password::"
-read mysql_root_password:: 
+read DB password
 
 VALIDATE() {
         if [ $1 -ne 0 ]
