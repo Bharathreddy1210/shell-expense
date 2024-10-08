@@ -47,17 +47,36 @@ else
     echo -e "Expense user already created.. $Y SKIP $N"
 fi     
 
-mkdir -p /app
+mkdir -p /app &>>LOGFILE
 VALIDATE $? "creating app directory"
 
-curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>LOGFILE
 VALIDATE $? "Downloading backend code"
 
-cd /app
+cd /app &>>LOGFILE
 unzip /tmp/backend.zip
 VALIDATE $? "Extracted backend code"
 
-npm install
+npm install &>>LOGFILE
 VALIDATE $? "Installing nodejs dependencies"
 
-cd /etc/systemd/system/backend.service
+cd /home/ec2-user/shell-expense/backend.service /etc/systemd/system/backend.service &>>LOGFILE
+VALIDATE $? "Copied backend service"
+
+systemctl daemon reload &>>LOGFILE
+VALIDATE $? "Daemon reload"
+
+systemctl start backend &>>LOGFILE
+VALIDATE $? "Starting Backend"
+
+systemctl enable backend &>>LOGFILE
+VALIDATE $? "enabling backend"
+
+dnf install mysql -y &>>LOGFILE
+VALIDATE $? "Installing mysql"
+
+mysql -h <db.bharathdevops.site> -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>LOGFILE
+VALIDATE $? "Schema Loading"
+
+systemctl restart backend &>>LOGFILE
+VALIDATE $? "restart the backend"
